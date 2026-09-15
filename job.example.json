@@ -1,0 +1,79 @@
+{
+  "_comment": [
+    "Copy to job.json (gitignored) and edit. Run it with:",
+    "    .\\.venv\\Scripts\\python.exe ollama_agent.py --job job.json",
+    "",
+    "TWO BLOCKS:",
+    "  hosts   - the machines to drive, and the ONE login for each",
+    "  actions - what to do, in order, on every host",
+    "",
+    "This file holds plaintext passwords. It is gitignored. Treat it like a",
+    "password file and keep it off shared drives."
+  ],
+
+  "model": "qwen2.5vl:7b",
+  "max_steps": 12,
+
+  "_hosts_comment": [
+    "One login per endpoint. Each host's login does BOTH jobs:",
+    "",
+    "  opening the session - the SERVER hands it to Windows Credential Manager",
+    "                        so mstsc authenticates. The model never sees it and",
+    "                        cannot ask for it.",
+    "",
+    "  signing in inside   - the model fills a sign-in box (Outlook, a portal)",
+    "                        by emitting",
+    "                            {\"action\": \"type_secret\",",
+    "                             \"secret\": \"login.password\"}",
+    "                        and this host substitutes the real value at the",
+    "                        keyboard. It really is typed into the app; it never",
+    "                        enters the model's context, the console, or the",
+    "                        transcript.",
+    "",
+    "\"login\" always means the account for the machine currently being driven.",
+    "While working on one host, no other host's password exists in the model's",
+    "world at all - so it cannot be typed on the wrong machine.",
+    "",
+    "Passwords must be typeable on the REMOTE keyboard layout. Accented or",
+    "non-Latin characters cannot be sent over RDP - the run reports that the",
+    "login could not be typed rather than half-typing it."
+  ],
+  "hosts": [
+    {
+      "host": "10.0.0.5",
+      "username": "CORP\\alice",
+      "password": "replace-me"
+    },
+    {
+      "host": "10.0.0.6",
+      "username": "CORP\\bob",
+      "password": "replace-me"
+    }
+  ],
+
+  "_actions_comment": [
+    "A plain string is an action that may type the host's login if it needs to.",
+    "The object form is explicit:",
+    "    { \"do\": \"...\", \"secrets\": [\"login\"] }   may sign in",
+    "    { \"do\": \"...\", \"secrets\": [] }          may NOT type the password",
+    "",
+    "Use \"secrets\": [] on every step that does not sign in. A step that never",
+    "needs the password should not be able to type it - that is the main guard",
+    "against a model being talked into typing it somewhere it should not.",
+    "",
+    "Write each action the way you would brief a new person: one concrete",
+    "outcome, naming what they should see when it is done. Vague goals fail.",
+    "  good: 'Open Notepad and type HELLO'",
+    "  bad:  'do the usual checks'"
+  ],
+  "actions": [
+    {
+      "do": "Open Notepad and type HELLO",
+      "secrets": []
+    },
+    {
+      "do": "Open Outlook. If it asks for a password, use the saved login. Stop when the inbox is on screen.",
+      "secrets": ["login"]
+    }
+  ]
+}

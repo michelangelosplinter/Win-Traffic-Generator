@@ -1,0 +1,11 @@
+{
+  "model": "qwen2.5vl:7b",
+  "max_steps": 8,
+  "hosts": [
+    { "host": "100.31.43.107", "username": "Administrator", "password": "l4%D)?!99j(BrqZ?c5-qX@3p94mPr8-s" }
+  ],
+  "actions": [
+    "Open Notepad, then type the word ALPHA into it",
+    "Type the word BRAVO into the Notepad window"
+  ]
+}

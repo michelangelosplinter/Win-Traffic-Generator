@@ -1,0 +1,6 @@
+# Direct dependencies. Everything else (httpx2, pydantic, anyio, ...) arrives
+# transitively via mcp.
+mcp>=2.2.0            # MCP server + stdio client
+pywin32>=306          # win32gui / win32api: window handling and synthetic input
+mss>=9.0.0            # fast screen capture of the mstsc client area
+pillow>=10.0.0        # PNG/JPEG encoding, downscaling, grid overlay
