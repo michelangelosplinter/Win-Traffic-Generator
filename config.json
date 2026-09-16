@@ -1,7 +1,0 @@
-{
-  "default_width": 1280,
-  "default_height": 800,
-  "connect_timeout_seconds": 40,
-  "allow_remote_run": false,
-  "screenshot_scale": 1.0
-}
