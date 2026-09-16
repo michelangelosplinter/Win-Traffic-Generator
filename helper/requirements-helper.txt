@@ -1,0 +1,10 @@
+# Helper build dependencies. Declare EVERY third-party import the helper relies
+# on - do not lean on a transitive dep (this project has been burned by that).
+#
+# Install into a STABLE Python 3.10-3.13 venv. uiautomation/comtypes/pillow ship
+# no wheels for a pre-release Python (a 3.14 alpha), so a venv built on one
+# installs "fine" and then fails to import - the same trap the pixel path hit.
+uiautomation>=2.0.29     # the UIA tree: enumerate + actuate (imports comtypes)
+comtypes>=1.4.0          # COM bridge uiautomation uses; pinned for frozen builds
+pillow>=10.0.0           # optional screenshot alongside the element list
+pyinstaller>=6.0         # freeze poke.py / helper.py to a self-contained .exe

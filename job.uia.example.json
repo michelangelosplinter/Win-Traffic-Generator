@@ -1,0 +1,38 @@
+{
+  "_comment": [
+    "Element-mode job for uia_agent.py (the UIA controller). Copy to job.json,",
+    "edit, then run:  python uia_agent.py --job job.json --token <SHARED_TOKEN>",
+    "",
+    "Each 'host' here is the LABEL a helper reports, NOT an address. On each VM:",
+    "   helper.exe --connect <CONTROLLER>:8765 --token <SHARED_TOKEN> --host-label vm-1",
+    "The controller matches a dialed-in helper to the host with the same label,",
+    "runs every action on it, and drives all connected hosts in parallel.",
+    "",
+    "username/password are the in-session login the model may type with",
+    "set_secret (Outlook, a portal). The model sees only 'login.username' /",
+    "'login.password', never the value. Use \"secrets\": [] on steps that must",
+    "never type the password. A lone backslash in a domain name must be doubled:",
+    "\"WHYNET\\Administrator\"."
+  ],
+
+  "model": "qwen2.5vl:7b",
+  "max_steps": 20,
+
+  "hosts": [
+    { "host": "vm-1", "username": "Administrator", "password": "replace-me" },
+    { "host": "vm-2", "username": "Administrator", "password": "replace-me" },
+    { "host": "vm-3", "username": "Administrator", "password": "replace-me" },
+    { "host": "vm-4", "username": "Administrator", "password": "replace-me" }
+  ],
+
+  "actions": [
+    { "do": "If a Windows Activation or 'Set Network Location' dialog is on screen, dismiss it (Ask me later / Close). Stop when the desktop is clear.",
+      "secrets": [] },
+    { "do": "Open Notepad and type: traffic-gen check OK. Stop when that text is visible in the editor.",
+      "secrets": [] },
+    { "do": "Open Microsoft Edge and go to https://example.com. Stop when the page has loaded.",
+      "secrets": [] },
+    { "do": "Open Outlook. If it asks to sign in, use the saved login. Stop when the inbox is on screen.",
+      "secrets": ["login"] }
+  ]
+}
